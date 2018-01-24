@@ -25,6 +25,12 @@ describe '#expire(key, seconds)' do
     end.should raise_error(Redis::CommandError)
   end
 
+  it 'raises an error if non-integer seconds is given' do
+    lambda do
+      @redises.expireat(@key, 1.1)
+    end.should raise_error(Redis::CommandError)
+  end
+
   it 'stringifies key' do
     @redises.expire(@key.to_sym, 9).should == true
   end

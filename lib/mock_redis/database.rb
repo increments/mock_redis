@@ -77,10 +77,18 @@ class MockRedis
     end
 
     def expire(key, seconds)
+      unless looks_like_integer?(seconds.to_s)
+        raise Redis::CommandError, 'ERR value is not an integer or out of range'
+      end
+
       pexpire(key, seconds.to_i * 1000)
     end
 
     def pexpire(key, ms)
+      unless looks_like_integer?(ms.to_s)
+        raise Redis::CommandError, 'ERR value is not an integer or out of range'
+      end
+
       now_ms = (@base.now.to_r * 1000).to_i
       pexpireat(key, now_ms + ms.to_i)
     end

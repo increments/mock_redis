@@ -21,7 +21,13 @@ describe '#pexpire(key, ms)' do
 
   it 'raises an error if ms is bogus' do
     lambda do
-      @redises.pexpireat(@key, 'a couple minutes or so')
+      @redises.pexpire(@key, 'a couple minutes or so')
+    end.should raise_error(Redis::CommandError)
+  end
+
+  it 'raises an error if non-integer ms is given' do
+    lambda do
+      @redises.pexpire(@key, 1.1)
     end.should raise_error(Redis::CommandError)
   end
 

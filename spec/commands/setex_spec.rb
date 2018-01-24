@@ -19,4 +19,10 @@ describe '#setex(key, seconds, value)' do
     @redises.real.ttl(@key).should > 0
     @redises.mock.ttl(@key).should > 0
   end
+
+  it 'raises an error if non-integer seconds is given' do
+    lambda do
+      @redises.setex(@key, 10.1, 'value')
+    end.should raise_error(Redis::CommandError)
+  end
 end
